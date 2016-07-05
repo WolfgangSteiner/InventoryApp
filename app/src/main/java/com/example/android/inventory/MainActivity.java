@@ -10,10 +10,18 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
+    ArrayList<Product> mProductList;
+    ProductListAdapter mProductListAdapter;
     InventoryDataSource mDataSource;
+    ListView mProductListView;
+    View mNoItemsView;
+
     private static final String LOG_TAG = "MainActivity";
 
     @Override
@@ -41,6 +49,16 @@ public class MainActivity extends AppCompatActivity
 
         Log.d(LOG_TAG, "DataSource is opened.");
         mDataSource.open();
+
+        mProductList = new ArrayList<Product>();
+        mProductListAdapter = new ProductListAdapter(this, mProductList);
+        mProductListView = (ListView) findViewById(R.id.list_view);
+        mProductListView.setAdapter(mProductListAdapter);
+
+        mNoItemsView = findViewById(R.id.no_items_view);
+        assert mNoItemsView != null;
+
+        updateProductList();
     }
 
     @Override
@@ -82,7 +100,27 @@ public class MainActivity extends AppCompatActivity
 
                 Product product = mDataSource.createProduct(productName, priceInCents, quantity);
                 Util.showToast(this, "Created: " + product);
+
+                updateProductList();
             }
+        }
+    }
+
+    private void updateProductList()
+    {
+        mProductList.clear();
+        mDataSource.getAllProducts(mProductList);
+        mProductListAdapter.notifyDataSetChanged();
+
+        if (mProductList.isEmpty())
+        {
+            mProductListView.setVisibility(View.GONE);
+            mNoItemsView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mProductListView.setVisibility(View.VISIBLE);
+            mNoItemsView.setVisibility(View.GONE);
         }
     }
 }

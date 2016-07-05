@@ -6,6 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by wolfgang on 04.07.16.
  */
@@ -112,6 +115,17 @@ public class InventoryDataSource
         mDatabase.execSQL(SQL_DELETE_ENTRIES);
     }
 
+    public void getAllProducts(ArrayList<Product> aProductList)
+    {
+        Cursor cursor = mDatabase.rawQuery("select * from " + InventoryContract.ProductEntry.TABLE_NAME, null);
 
-
+        if (cursor .moveToFirst())
+        {
+            while (cursor.isAfterLast() == false)
+            {
+                aProductList.add(createProductForCursor(cursor));
+                cursor.moveToNext();
+            }
+        }
+    }
 }
