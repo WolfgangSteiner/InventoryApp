@@ -9,6 +9,7 @@
         android:layout_width="@dimen/list_view_image_size"
         android:layout_height="@dimen/list_view_image_size"
         android:background="@android:color/holo_red_dark"
+        android:id="@+id/product_image_view"
         android:scaleType="centerCrop"/>
 
     <LinearLayout
@@ -46,6 +47,14 @@
                 android:gravity="center"
                 android:text="100"
                 android:id="@+id/product_quantity_field"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/button_size"
+                android:text="@string/button_sell_item"
+                android:textAllCaps="true"
+                android:id="@+id/product_sell_button"
+                android:onClick="onSellProduct"/>
 
         </LinearLayout>
 

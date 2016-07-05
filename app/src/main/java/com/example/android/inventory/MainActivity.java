@@ -106,6 +106,20 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    public void onSellProduct(View aView)
+    {
+        Product product = mProductList.get((Integer)aView.getTag());
+        int quantity = product.getQuantity();
+
+        if (quantity > 0)
+        {
+            quantity--;
+        }
+        
+        mDataSource.updateQuantity(product, quantity);
+        mProductListAdapter.notifyDataSetChanged();
+    }
+
     private void updateProductList()
     {
         mProductList.clear();

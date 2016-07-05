@@ -38,6 +38,8 @@ public class ProductListAdapter extends ArrayAdapter<Product>
         TextView quantityTextView = (TextView) productItemView.findViewById(R.id.product_quantity_field);
         quantityTextView.setText(Integer.toString(product.getQuantity()));
 
+        productItemView.findViewById(R.id.product_sell_button).setTag(Integer.valueOf(position));
+
         return productItemView;
     }
 }
