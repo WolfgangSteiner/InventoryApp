@@ -6,12 +6,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity
 {
+    InventoryDataSource mDataSource;
+    private static final String LOG_TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +35,12 @@ public class MainActivity extends AppCompatActivity
                     startActivityForResult(newProductIntent, 0);
                 }
             });
+
+
+        mDataSource = new InventoryDataSource(this);
+
+        Log.d(LOG_TAG, "DataSource is opened.");
+        mDataSource.open();
     }
 
     @Override
@@ -70,7 +79,9 @@ public class MainActivity extends AppCompatActivity
                 String productName = data.getStringExtra("product_name");
                 int priceInCents = data.getIntExtra("price", 0);
                 int quantity = data.getIntExtra("quantity", 0);
-                Util.showToast(this, "Received: " + productName + " " + Util.formatPrice(priceInCents) + " " + quantity + "x");
+
+                Product product = mDataSource.createProduct(productName, priceInCents, quantity);
+                Util.showToast(this, "Created: " + product);
             }
         }
     }
