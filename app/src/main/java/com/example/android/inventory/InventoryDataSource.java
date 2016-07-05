@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  */
 public class InventoryDataSource
 {
+    private Context mContext;
     private SQLiteDatabase mDatabase;
     private InventoryDbHelper mHelper;
     private final String LOG_TAG = "InventoryDataSource";
@@ -22,11 +24,13 @@ public class InventoryDataSource
             InventoryContract.ProductEntry.COLUMN_ID,
             InventoryContract.ProductEntry.COLUMN_NAME,
             InventoryContract.ProductEntry.COLUMN_PRICE,
-            InventoryContract.ProductEntry.COLUMN_QUANTITY
+            InventoryContract.ProductEntry.COLUMN_QUANTITY,
+            InventoryContract.ProductEntry.COLUMN_IMAGEPATH
     };
 
     public InventoryDataSource(Context context)
     {
+        mContext = context;
         Log.d(LOG_TAG, "create dbHelper");
         mHelper = new InventoryDbHelper(context);
     }
@@ -45,12 +49,13 @@ public class InventoryDataSource
         Log.d(LOG_TAG, "Database is closed by DBHelper.");
     }
 
-    public Product createProduct(String aProductName, int aPrice, int aQuantity)
+    public Product createProduct(String aProductName, int aPrice, int aQuantity, String aImagePath)
     {
         ContentValues values = new ContentValues();
         values.put(InventoryContract.ProductEntry.COLUMN_NAME, aProductName);
         values.put(InventoryContract.ProductEntry.COLUMN_PRICE, aPrice);
         values.put(InventoryContract.ProductEntry.COLUMN_QUANTITY, aQuantity);
+        values.put(InventoryContract.ProductEntry.COLUMN_IMAGEPATH, aImagePath);
 
         long insertId = mDatabase.insert(InventoryContract.ProductEntry.TABLE_NAME, null, values);
 
@@ -131,13 +136,15 @@ public class InventoryDataSource
         int idName = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_NAME);
         int idPrice = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_PRICE);
         int idQuantity = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_QUANTITY);
+        int idImagePath = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_IMAGEPATH);
 
         long id = cursor.getLong(idIndex);
         String name = cursor.getString(idName);
         int price = cursor.getInt(idPrice);
         int quantity = cursor.getInt(idQuantity);
+        String imagePath = cursor.getString(idImagePath);
 
-        Product product = new Product(id, name, price, quantity);
+        Product product = new Product(id, name, price, quantity, imagePath);
 
         Log.d(LOG_TAG, "Instantiated product: "  + product);
 
@@ -154,10 +161,16 @@ public class InventoryDataSource
 
     public void deleteProduct(Product aProduct)
     {
-        final String SQL_DELETE_ENTRIES =
+        String SQL_DELETE_ENTRY =
             "DELETE FROM " + InventoryContract.ProductEntry.TABLE_NAME
             + " WHERE " + InventoryContract.ProductEntry.COLUMN_ID
             + " = " + Long.toString(aProduct.getProductId());
+
+        File directory = mContext.getDir("images", Context.MODE_PRIVATE);
+        File mypath = new File(directory, aProduct.getImagePath());
+        mypath.delete();
+
+        mDatabase.execSQL(SQL_DELETE_ENTRY);
 
     }
 

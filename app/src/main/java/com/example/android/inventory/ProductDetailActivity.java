@@ -1,18 +1,29 @@
 package com.example.android.inventory;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.ParcelFileDescriptor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class ProductDetailActivity extends AppCompatActivity
@@ -20,6 +31,7 @@ public class ProductDetailActivity extends AppCompatActivity
     private EditText mQuantityField;
     private EditText mPriceField;
     private TextView mProductNameField;
+    private ImageView mImageView;
     private int mQuantity;
 
     private ArrayList<Product> mProductList;
@@ -68,8 +80,24 @@ public class ProductDetailActivity extends AppCompatActivity
 
         mProductNameField = (TextView) findViewById(R.id.product_name_field);
         mProductNameField.setText("" + mProduct.getName());
-    }
 
+        mImageView = (ImageView) findViewById(R.id.product_image_view);
+        String imagePath = mProduct.getImagePath();
+        Log.d("Image:", imagePath);
+
+        try
+        {
+            File directory = this.getDir("images", Context.MODE_PRIVATE);
+            File mypath = new File(directory,imagePath);
+            FileInputStream fis = new FileInputStream(mypath);
+            Bitmap bitmap = BitmapFactory.decodeStream(fis);
+            mImageView.setImageBitmap(bitmap);
+        }
+        catch (Exception e)
+        {
+            Util.showToast(this, "Unable to open image");
+        }
+    }
 
 
     private void updatePrice()

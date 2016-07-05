@@ -10,24 +10,27 @@ public class Product
     private int mPriceInCents;
     private int mQuantity;
 
-    public Product(long aProductId, String aName, int aPriceInCents, int aQuantity)
+    private String mImagePath;
+
+    public Product(long aProductId, String aName, int aPriceInCents, int aQuantity, String aImagePath)
     {
         this.mName = aName;
         this.mPriceInCents = aPriceInCents;
         this.mQuantity = aQuantity;
         this.mProductId = aProductId;
+        this.mImagePath = aImagePath;
     }
-
 
     @Override
     public String toString()
     {
         return "Product{" +
-                "mName='" + mName + '\'' +
-                ", mPriceInCents='" + mPriceInCents + '\'' +
-                ", mQuantity=" + mQuantity +
-                ", mProductId=" + mProductId +
-                '}';
+            "mName='" + mName + '\'' +
+            ", mPriceInCents='" + mPriceInCents + '\'' +
+            ", mQuantity=" + mQuantity +
+            ", mProductId=" + mProductId +
+            ", mImagePath=" + mImagePath +
+            '}';
     }
 
     public String getName()
@@ -68,5 +71,10 @@ public class Product
     public void setProductId(long mProductId)
     {
         this.mProductId = mProductId;
+    }
+
+    public String getImagePath()
+    {
+        return mImagePath;
     }
 }

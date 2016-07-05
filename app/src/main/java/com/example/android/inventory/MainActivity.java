@@ -54,8 +54,6 @@ public class MainActivity extends AppCompatActivity
             });
 
 
-        Log.d(LOG_TAG, "DataSource is opened.");
-
         mProductListAdapter = new ProductListAdapter(this, mProductList);
 
         mOnItemClickListener = new AdapterView.OnItemClickListener()
@@ -116,10 +114,9 @@ public class MainActivity extends AppCompatActivity
                 String productName = data.getStringExtra("product_name");
                 int priceInCents = data.getIntExtra("price", 0);
                 int quantity = data.getIntExtra("quantity", 0);
+                String imagePath = data.getStringExtra("image_path");
 
-                Product product = mDataSource.createProduct(productName, priceInCents, quantity);
-                Util.showToast(this, "Created: " + product);
-
+                Product product = mDataSource.createProduct(productName, priceInCents, quantity, imagePath);
                 updateProductList();
             }
         }
@@ -162,5 +159,16 @@ public class MainActivity extends AppCompatActivity
     {
         super.onResume();
         mProductListAdapter.notifyDataSetChanged();
+
+        if (mProductList.isEmpty())
+        {
+            mProductListView.setVisibility(View.GONE);
+            mNoItemsView.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            mProductListView.setVisibility(View.VISIBLE);
+            mNoItemsView.setVisibility(View.GONE);
+        }
     }
 }

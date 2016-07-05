@@ -11,7 +11,8 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:scaleType="centerCrop"
-        android:src = "@drawable/tomaten"/>
+        android:src = "@drawable/tomaten"
+        android:id = "@+id/product_image_view"/>
 
     <LinearLayout
         android:layout_width="match_parent"
