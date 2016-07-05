@@ -156,4 +156,11 @@ public class MainActivity extends AppCompatActivity
             mNoItemsView.setVisibility(View.GONE);
         }
     }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        mProductListAdapter.notifyDataSetChanged();
+    }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -91,5 +92,25 @@ public class ProductDetailActivity extends AppCompatActivity
         return Util.priceFromString(mPriceString);
     }
 
+    public void onIncreaseQuantity(View aView)
+    {
+        mQuantity++;
+        updateQuantity();
+    }
+
+    public void onDecreaseQuantity(View aView)
+    {
+        if (mQuantity > 1)
+        {
+            mQuantity--;
+            updateQuantity();
+        }
+    }
+
+    private void updateQuantity()
+    {
+        mQuantityField.setText(Integer.toString(mQuantity));
+        mDataSource.updateQuantity(mProduct, mQuantity);
+    }
 
 }
