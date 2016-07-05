@@ -92,6 +92,24 @@ public class InventoryDataSource
         aProduct.setQuantity(aQuantity);
     }
 
+
+    public void updatePrice(Product aProduct, int aPrice)
+    {
+        Log.d(LOG_TAG, "udating price to " + aPrice);
+
+        ContentValues cv = new ContentValues();
+        cv.put(InventoryContract.ProductEntry.COLUMN_PRICE, aPrice);
+
+        int result = mDatabase.update(
+            InventoryContract.ProductEntry.TABLE_NAME,
+            cv,
+            InventoryContract.ProductEntry.COLUMN_ID + " = " + Long.toString(aProduct.getProductId()),
+            null);
+
+        aProduct.setPriceInCents(aPrice);
+    }
+
+
     private int getPrice(long aProductId)
     {
         Cursor cursor = getCursor(aProductId);

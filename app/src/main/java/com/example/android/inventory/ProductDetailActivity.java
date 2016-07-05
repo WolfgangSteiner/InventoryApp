@@ -84,6 +84,7 @@ public class ProductDetailActivity extends AppCompatActivity
     {
         String priceString = Util.formatPrice(aPriceInCents);
         mPriceField.setText(priceString);
+        mDataSource.updatePrice(mProduct, aPriceInCents);
     }
 
     private int getPrice()
