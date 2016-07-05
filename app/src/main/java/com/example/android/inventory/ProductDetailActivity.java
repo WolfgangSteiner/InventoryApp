@@ -1,6 +1,9 @@
 package com.example.android.inventory;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -67,6 +70,8 @@ public class ProductDetailActivity extends AppCompatActivity
         mProductNameField.setText("" + mProduct.getName());
     }
 
+
+
     private void updatePrice()
     {
         try
@@ -108,10 +113,61 @@ public class ProductDetailActivity extends AppCompatActivity
         }
     }
 
+
+    public void onRemoveProduct(View aView)
+    {
+        new AlertDialog.Builder(this)
+            .setMessage(getString(R.string.dialog_remove_entry_text))
+            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                  onDoRemoveProduct();
+                }
+            })
+            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // do nothing
+                }
+            })
+            .show();
+    }
+
+    public void onOrderProduct(View aView)
+    {
+        String subject = "Product order";
+        String body =
+            "Hi, \n\n"
+            + "I would like to order 10 more boxes of "
+            + mProduct.getName() + ".\n\n"
+            + "Kind Regards";
+
+        composeEmail(subject, body);
+    }
+
+    public void onDoRemoveProduct()
+    {
+        mDataSource.deleteProduct(mProduct);
+        mProductList.remove(mProduct);
+        mProduct = null;
+        finish();
+    }
+
     private void updateQuantity()
     {
         mQuantityField.setText(Integer.toString(mQuantity));
         mDataSource.updateQuantity(mProduct, mQuantity);
+    }
+
+    public void composeEmail(String subject, String text)
+    {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+
+        if (intent.resolveActivity(getPackageManager()) != null)
+        {
+            startActivity(intent);
+        }
     }
 
 }

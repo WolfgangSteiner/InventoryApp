@@ -13,6 +13,8 @@
     <string name="button_order_product">Order Product</string>
     <string name="button_add_product">Add Product</string>
 
+    <string name="dialog_remove_entry_text">Are you sure you want to delete this product from the inventory?</string>
+
     <string name="invalid_price_message">The price is of invalid format.</string>
     <string name="product_name_empty_message">You must enter a product name!</string>
 </resources>

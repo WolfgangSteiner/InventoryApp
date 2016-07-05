@@ -92,7 +92,6 @@ public class InventoryDataSource
         aProduct.setQuantity(aQuantity);
     }
 
-
     public void updatePrice(Product aProduct, int aPrice)
     {
         Log.d(LOG_TAG, "udating price to " + aPrice);
@@ -108,7 +107,6 @@ public class InventoryDataSource
 
         aProduct.setPriceInCents(aPrice);
     }
-
 
     private int getPrice(long aProductId)
     {
@@ -152,6 +150,15 @@ public class InventoryDataSource
                 "DELETE FROM " + InventoryContract.ProductEntry.TABLE_NAME;
 
         mDatabase.execSQL(SQL_DELETE_ENTRIES);
+    }
+
+    public void deleteProduct(Product aProduct)
+    {
+        final String SQL_DELETE_ENTRIES =
+            "DELETE FROM " + InventoryContract.ProductEntry.TABLE_NAME
+            + " WHERE " + InventoryContract.ProductEntry.COLUMN_ID
+            + " = " + Long.toString(aProduct.getProductId());
+
     }
 
     public void getAllProducts(ArrayList<Product> aProductList)
