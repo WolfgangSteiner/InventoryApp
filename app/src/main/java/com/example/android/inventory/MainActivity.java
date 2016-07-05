@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity
     private ArrayList<Product> mProductList;
     private InventoryDataSource mDataSource;
     private InventoryApplication mInventoryApplication;
+    private AdapterView.OnItemClickListener mOnItemClickListener;
 
 
     private static final String LOG_TAG = "MainActivity";
@@ -52,12 +54,25 @@ public class MainActivity extends AppCompatActivity
             });
 
 
-
         Log.d(LOG_TAG, "DataSource is opened.");
 
         mProductListAdapter = new ProductListAdapter(this, mProductList);
+
+        mOnItemClickListener = new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                Intent editProductIntent = new Intent(MainActivity.this, ProductDetailActivity.class);
+                editProductIntent.putExtra("product_index", i);
+                startActivityForResult(editProductIntent, 1);
+            }
+        };
+
+
         mProductListView = (ListView) findViewById(R.id.list_view);
         mProductListView.setAdapter(mProductListAdapter);
+        mProductListView.setOnItemClickListener(mOnItemClickListener);
 
         mNoItemsView = findViewById(R.id.no_items_view);
         assert mNoItemsView != null;

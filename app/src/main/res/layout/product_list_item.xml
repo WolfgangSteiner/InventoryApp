@@ -10,6 +10,8 @@
         android:layout_height="@dimen/list_view_image_size"
         android:background="@android:color/holo_red_dark"
         android:id="@+id/product_image_view"
+        android:src="@drawable/tomaten"
+
         android:scaleType="centerCrop"/>
 
     <LinearLayout
@@ -54,6 +56,7 @@
                 android:text="@string/button_sell_item"
                 android:textAllCaps="true"
                 android:id="@+id/product_sell_button"
+                android:focusable="false"
                 android:onClick="onSellProduct"/>
 
         </LinearLayout>

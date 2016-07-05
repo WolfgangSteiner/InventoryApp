@@ -22,7 +22,7 @@ public class Product
     @Override
     public String toString()
     {
-        return "Habit{" +
+        return "Product{" +
                 "mName='" + mName + '\'' +
                 ", mPriceInCents='" + mPriceInCents + '\'' +
                 ", mQuantity=" + mQuantity +
