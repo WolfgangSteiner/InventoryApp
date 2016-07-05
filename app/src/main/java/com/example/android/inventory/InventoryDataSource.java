@@ -78,16 +78,35 @@ public class InventoryDataSource
 
     public void updateQuantity(Product aProduct, int aQuantity)
     {
+        Log.d(LOG_TAG, "udating quantity to " + aQuantity);
+
         ContentValues cv = new ContentValues();
         cv.put(InventoryContract.ProductEntry.COLUMN_QUANTITY, aQuantity);
 
-        mDatabase.update(
-                InventoryContract.ProductEntry.TABLE_NAME,
-                cv,
-                "? = ?",
-                new String[] { InventoryContract.ProductEntry.COLUMN_ID, Long.toString(aProduct.getProductId())});
+        int result = mDatabase.update(
+            InventoryContract.ProductEntry.TABLE_NAME,
+            cv,
+            InventoryContract.ProductEntry.COLUMN_ID + " = " + Long.toString(aProduct.getProductId()),
+            null);
 
         aProduct.setQuantity(aQuantity);
+    }
+
+    private int getPrice(long aProductId)
+    {
+        Cursor cursor = getCursor(aProductId);
+        cursor.moveToFirst();
+        int idPrice = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_PRICE);
+        return cursor.getInt(idPrice);
+    }
+
+    private int getQuantity(long aProductId)
+    {
+        Cursor cursor = getCursor(aProductId);
+        Log.d(LOG_TAG, "get quantity of product: " + createProductForCursor(cursor));
+        cursor.moveToFirst();
+        int idQuantity = cursor.getColumnIndex(InventoryContract.ProductEntry.COLUMN_QUANTITY);
+        return cursor.getInt(idQuantity);
     }
 
     private Product createProductForCursor(Cursor cursor)
@@ -102,9 +121,11 @@ public class InventoryDataSource
         int price = cursor.getInt(idPrice);
         int quantity = cursor.getInt(idQuantity);
 
-        Product Product = new Product(id, name, price, quantity);
+        Product product = new Product(id, name, price, quantity);
 
-        return Product;
+        Log.d(LOG_TAG, "Instantiated product: "  + product);
+
+        return product;
     }
 
     public void deleteAllProducts()
