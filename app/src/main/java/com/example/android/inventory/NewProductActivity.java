@@ -1,21 +1,28 @@
 package com.example.android.inventory;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class NewProductActivity extends AppCompatActivity
 {
+    private final int RESULT_LOAD_IMAGE = 0;
     private int mQuantity;
     private EditText mQuantityField;
     private EditText mPriceField;
     private EditText mProductNameField;
+    private ImageView mImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,7 +49,7 @@ public class NewProductActivity extends AppCompatActivity
             });
 
         mProductNameField = (EditText) findViewById(R.id.product_name_field);
-
+        mImageView = (ImageView) findViewById(R.id.image_view);
         mQuantity = 1;
     }
 
@@ -72,6 +79,33 @@ public class NewProductActivity extends AppCompatActivity
             intent.putExtra("quantity", mQuantity);
             setResult(RESULT_OK, intent);
             finish();
+        }
+    }
+
+    public void onAddImage(View aView)
+    {
+        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                Cursor cursor = getContentResolver().query(selectedImage,filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+                mImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            }
         }
     }
 

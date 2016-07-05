@@ -10,7 +10,20 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.android.inventory.NewProductActivity">
 
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scaleType="center"
+        android:onClick="onAddImage"
+        android:background="@android:color/darker_gray"
+        android:src="@android:drawable/ic_menu_add"
+        android:id = "@+id/image_view"/>
+
+
     <TextView
+        android:layout_marginTop="@dimen/mid_gap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/product_name_label"
@@ -105,13 +118,10 @@
     </LinearLayout>
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
 
 
     <Button
+        android:layout_marginTop="@dimen/mid_gap"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAllCaps="true"
