@@ -1,5 +1,6 @@
 package com.example.android.inventory;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -14,7 +15,7 @@ public class NewProductActivity extends AppCompatActivity
     private int mQuantity;
     private EditText mQuantityField;
     private EditText mPriceField;
-
+    private EditText mProductNameField;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -40,6 +41,7 @@ public class NewProductActivity extends AppCompatActivity
                 }
             });
 
+        mProductNameField = (EditText) findViewById(R.id.product_name_field);
 
         mQuantity = 1;
     }
@@ -60,10 +62,24 @@ public class NewProductActivity extends AppCompatActivity
         }
     }
 
+    public void onAddNewProduct(View aView)
+    {
+        if (validateValues())
+        {
+            Intent intent = new Intent();
+            intent.putExtra("product_name", getProductName());
+            intent.putExtra("price", getPrice());
+            intent.putExtra("quantity", mQuantity);
+            setResult(RESULT_OK, intent);
+            finish();
+        }
+    }
+
     private void updateQuantity()
     {
         mQuantityField.setText(Integer.toString(mQuantity));
     }
+
 
     private void setPrice(int aPriceInCents)
     {
@@ -88,5 +104,21 @@ public class NewProductActivity extends AppCompatActivity
         {
             Toast.makeText(this, R.string.invalid_price_message, Toast.LENGTH_SHORT);
         }
+    }
+
+    private String getProductName()
+    {
+        return mProductNameField.getText().toString().trim();
+    }
+
+    private boolean validateValues()
+    {
+        if (getProductName().isEmpty())
+        {
+            Util.showToast(this, R.string.product_name_empty_message);
+            return false;
+        }
+
+        return true;
     }
 }

@@ -7,5 +7,6 @@
     <string name="quantity_label">Quantity</string>
     <string name="price_label">Price</string>
     <string name="add_product_button_text">Add Product</string>
-    <string name="invalid_price_message">The price is of invalid format.</string>    
+    <string name="invalid_price_message">The price is of invalid format.</string> 
+    <string name="product_name_empty_message">You must enter a product name!</string>   
 </resources>

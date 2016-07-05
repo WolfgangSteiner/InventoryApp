@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity
                 @Override
                 public void onClick(View view)
                 {
-                    startActivity(new Intent(MainActivity.this, NewProductActivity.class));
+                    Intent newProductIntent = new Intent(MainActivity.this, NewProductActivity.class);
+                    startActivityForResult(newProductIntent, 0);
                 }
             });
     }
@@ -56,5 +57,21 @@ public class MainActivity extends AppCompatActivity
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 0)
+        {
+            if (resultCode == RESULT_OK)
+            {
+                String productName = data.getStringExtra("product_name");
+                int priceInCents = data.getIntExtra("price", 0);
+                int quantity = data.getIntExtra("quantity", 0);
+                Util.showToast(this, "Received: " + productName + " " + Util.formatPrice(priceInCents) + " " + quantity + "x");
+            }
+        }
     }
 }
