@@ -16,11 +16,13 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
 {
-    ArrayList<Product> mProductList;
-    ProductListAdapter mProductListAdapter;
-    InventoryDataSource mDataSource;
-    ListView mProductListView;
-    View mNoItemsView;
+    private ProductListAdapter mProductListAdapter;
+    private ListView mProductListView;
+    private View mNoItemsView;
+    private ArrayList<Product> mProductList;
+    private InventoryDataSource mDataSource;
+    private InventoryApplication mInventoryApplication;
+
 
     private static final String LOG_TAG = "MainActivity";
 
@@ -28,6 +30,11 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        mInventoryApplication = (InventoryApplication) getApplication();
+        mProductList = mInventoryApplication.mProductList;
+        mDataSource = mInventoryApplication.mDataSource;
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -45,12 +52,9 @@ public class MainActivity extends AppCompatActivity
             });
 
 
-        mDataSource = new InventoryDataSource(this);
 
         Log.d(LOG_TAG, "DataSource is opened.");
-        mDataSource.open();
 
-        mProductList = new ArrayList<Product>();
         mProductListAdapter = new ProductListAdapter(this, mProductList);
         mProductListView = (ListView) findViewById(R.id.list_view);
         mProductListView.setAdapter(mProductListAdapter);
@@ -115,7 +119,7 @@ public class MainActivity extends AppCompatActivity
         {
             quantity--;
         }
-        
+
         mDataSource.updateQuantity(product, quantity);
         mProductListAdapter.notifyDataSetChanged();
     }
